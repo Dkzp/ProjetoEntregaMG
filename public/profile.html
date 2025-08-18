@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Fryday's</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <!-- O CABEÇALHO SERÁ ATUALIZADO PELO PASSO 5 - COPIE E COLE A NOVA VERSÃO AQUI -->
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">Fryday's</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menus</a></li>
+                <li><a href="promocoes.html">Promoções</a></li>
+                <li><a href="contato.html">Contato</a></li>
+                <!-- Links dinâmicos que o JS vai controlar -->
+                <li id="loginNav" style="display: none;"><a href="login.html">Login</a></li>
+                <li id="logoutNav" style="display: none;"><a href="#" id="logoutLink">Logout</a></li>
+            </ul>
+            <div class="nav-icons">
+                <a href="#" aria-label="Carrinho"><i class="fas fa-shopping-cart"></i></a>
+                <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="profile-page-content">
+        <div class="profile-card">
+            <div class="profile-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+            <h1>Bem-vindo(a), <span id="username">Carregando...</span>!</h1>
+            <p>Seu email de acesso é: <strong id="email">Carregando...</strong></p>
+            <button id="logoutBtn">Sair da Conta</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Fryday's. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    
+    <!-- Script que controla a lógica desta página -->
+    <script src="js/profile.js"></script>
+    <!-- Script que atualiza a navegação em todas as páginas -->
+    <script src="js/auth-nav.js" defer></script>
+</body>
+</html>

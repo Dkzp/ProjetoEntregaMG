@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fryday's - Fale Conosco</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">Fryday's</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menus</a></li>
+                <li><a href="promocoes.html">Promoções</a></li>
+                <li><a href="contato.html" class="active">Contato</a></li>
+                <li id="loginNav"><a href="login.html">Login</a></li>
+                <li id="logoutNav" style="display: none;"><a href="#" id="logoutLink">Logout</a></li>
+            </ul>
+            <div class="nav-icons">
+                <a href="#" aria-label="Carrinho"><i class="fas fa-shopping-cart"></i></a>
+                <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="contato-page">
+        <section class="page-title-section contact-title-bg">
+            <div class="container">
+                <h1>Entre em Contato <i class="fas fa-envelope-open-text"></i></h1>
+                <p>Tem dúvidas, sugestões ou quer fazer um elogio? Use os canais abaixo!</p>
+            </div>
+        </section>
+
+        <section class="container contact-content-section">
+            <div class="contact-flex-container">
+                <div class="contact-info-block">
+                    <h2>Nossos Contatos</h2>
+                    <p>Prefere falar diretamente? Sem problemas!</p>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i><div><strong>Endereço:</strong><br>Rua da Fome, 123 - Centro<br>Assis Chateaubriand, PR - 85935-000</div></li>
+                        <li><i class="fas fa-phone-alt"></i><div><strong>Telefone / WhatsApp:</strong><br>(44) 99999-8888</div></li>
+                        <li><i class="fas fa-envelope"></i><div><strong>Email:</strong><br>contatofryd@gmail.com</div></li>
+                        <li><i class="fas fa-clock"></i><div><strong>Horário de Atendimento:</strong><br>Terça a Domingo: 18:00 - 23:30</div></li>
+                    </ul>
+                     <div class="contact-social-icons">
+                        <strong>Siga-nos:</strong>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div class="contact-form-block">
+                    <h2>Envie sua Mensagem</h2>
+                    <p>Preencha o formulário abaixo e retornaremos assim que possível.</p>
+                    <!-- O action agora aponta para a nossa rota no backend -->
+                    <form id="contact-form" method="POST" action="/contact">
+                         <div class="form-group">
+                             <label for="name">Nome Completo:</label>
+                             <input type="text" id="name" name="user_name" placeholder="Digite seu nome" required>
+                         </div>
+                         <div class="form-group">
+                             <label for="email">Seu Melhor Email:</label>
+                             <input type="email" id="email" name="user_email" placeholder="exemplo@email.com" required>
+                         </div>
+                          <div class="form-group">
+                             <label for="phone">Telefone (Opcional):</label>
+                             <input type="tel" id="phone" name="user_phone" placeholder="(XX) XXXXX-XXXX">
+                         </div>
+                         <div class="form-group">
+                             <label for="subject">Assunto:</label>
+                             <input type="text" id="subject" name="user_subject" placeholder="Sobre o que você quer falar?" required>
+                         </div>
+                         <div class="form-group">
+                             <label for="message">Sua Mensagem:</label>
+                             <textarea id="message" name="user_message" rows="6" placeholder="Escreva sua dúvida ou sugestão aqui..." required></textarea>
+                         </div>
+                         <div class="form-group">
+                            <button type="submit" class="cta-button">Enviar Mensagem <i class="fas fa-paper-plane"></i></button>
+                         </div>
+                         <!-- Div para mostrar mensagens de sucesso ou erro -->
+                         <div id="form-messages" aria-live="polite"></div>
+                    </form>
+                </div>
+            </div>
+         </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Fryday's. Todos os direitos reservados.</p>
+            <div class="social-icons">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="Whatsapp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+    <script src="js/auth-nav.js" defer></script>
+    
+    <!-- NOVO SCRIPT PARA LIDAR COM O ENVIO DO FORMULÁRIO -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const contactForm = document.getElementById('contact-form');
+            const formMessages = document.getElementById('form-messages');
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+
+            contactForm.addEventListener('submit', async function (event) {
+                // 1. Previne o comportamento padrão do formulário (recarregar a página)
+                event.preventDefault();
+
+                const originalButtonText = submitButton.innerHTML;
+                submitButton.disabled = true;
+                submitButton.innerHTML = 'Enviando... <i class="fas fa-spinner fa-spin"></i>';
+                formMessages.textContent = '';
+                formMessages.className = '';
+
+                // 2. Coleta os dados do formulário
+                const formData = new FormData(contactForm);
+                // Converte para um objeto simples que pode ser transformado em JSON
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    // 3. Envia os dados para o backend usando a API Fetch
+                    const response = await fetch('/contact', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    // 4. Analisa a resposta do servidor
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        // Sucesso (status 2xx)
+                        formMessages.textContent = result.message;
+                        formMessages.className = 'success-message'; // Adicione estilo para .success-message no seu CSS
+                        contactForm.reset(); // Limpa o formulário
+                    } else {
+                        // Erro (status 4xx ou 5xx)
+                        formMessages.textContent = result.message || 'Ocorreu um erro. Tente novamente.';
+                        formMessages.className = 'error-message'; // Adicione estilo para .error-message no seu CSS
+                    }
+
+                } catch (error) {
+                    // Erro de rede ou outro problema
+                    console.error('Erro ao enviar formulário:', error);
+                    formMessages.textContent = 'Não foi possível conectar ao servidor. Verifique sua internet.';
+                    formMessages.className = 'error-message';
+                } finally {
+                    // 5. Restaura o botão, independentemente do resultado
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

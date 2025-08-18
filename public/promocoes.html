@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fryday's - Promoções Imperdíveis!</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">Fryday's</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menus</a></li>
+                <li><a href="promocoes.html" class="active">Promoções</a></li>
+                <li><a href="contato.html">Contato</a></li>
+                <li id="loginNav"><a href="login.html">Login</a></li>
+                <li id="logoutNav" style="display: none;"><a href="#" id="logoutLink">Logout</a></li>
+            </ul>
+            <div class="nav-icons">
+                <a href="#" aria-label="Carrinho"><i class="fas fa-shopping-cart"></i></a>
+                <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="promocoes-page">
+        <section class="page-title-section promo-title-bg">
+            <div class="container">
+                <h1>Ofertas Que <br><span>Você Não Pode Perder!</span> <i class="fas fa-tags"></i></h1>
+                <p>Combos, descontos e brindes selecionados especialmente pra você matar a fome!</p>
+            </div>
+        </section>
+
+        <div class="container promotions-container">
+             <section class="promo-highlight">
+                <div class="promo-highlight-content">
+                    <div class="promo-highlight-image">
+                         <img src="https://i.ibb.co/yqM0kXk/promo-double-burger.png" alt="Promoção Dois Smash Burgers Incríveis">
+                         <span class="highlight-badge">OFERTA TOP!</span>
+                    </div>
+                    <div class="promo-highlight-text">
+                        <h2>DOIS SUPER SMASH BURGERS</h2>
+                        <p class="promo-description">Leve dois dos nossos deliciosos Smash Burgers (carne 100g, queijo cheddar, pão brioche) por um preço inacreditável!</p>
+                        <div class="promo-price-area">
+                            <span class="price-label">Por Apenas:</span>
+                            <span class="main-price">R$ 29<span class="cents">,99</span></span>
+                        </div>
+                        <a href="menu.html#hamburgueres" class="cta-button large">QUERO APROVEITAR!</a>
+                         <p class="validity">Válido enquanto durarem os estoques.</p>
+                    </div>
+                </div>
+             </section>
+
+             <hr class="promo-divider">
+
+             <h2 class="section-title small-title">Mais Ofertas <span>Deliciosas</span></h2>
+
+             <div class="promotions-grid-fullpage">
+                 <div class="promo-block promo-2 colored-bg">
+                    <h3>PEÇA E GANHE! <i class="fas fa-gift"></i></h3>
+                    <p>UMA BATATA FRITA</p>
+                    <span>DE BRINDE!*</span>
+                    <img src="https://i.ibb.co/fC9r4G6/fries-card.png" alt="Batata Frita de Brinde">
+                    <a href="menu.html" class="cta-button secondary small">Montar Pedido</a>
+                    <small>*Em pedidos acima de R$ 40,00</small>
+                 </div>
+
+                 <div class="promo-block promo-combo">
+                     <img src="https://via.placeholder.com/300x180/e74c3c/ffffff?text=Pizza+G+Refri" alt="Combo Pizza Grande + Refrigerante">
+                     <h3>Combo Pizza Família</h3>
+                     <p class="combo-details">1 Pizza Grande (sabores selecionados) + 1 Refri 2L</p>
+                     <p class="combo-price">De <del>R$ 65,00</del> por <strong>R$ 55,00</strong></p>
+                     <a href="menu.html#pizzas" class="cta-button small">Pedir Combo</a>
+                 </div>
+
+                <div class="promo-block promo-3 colored-bg">
+                    <h3>QUINTA DO <br><span>HOT DOG!</span> <i class="fas fa-hotdog"></i></h3>
+                    <img src="https://i.ibb.co/bQ489wV/hotdog-card.png" alt="Promoção Hot Dog">
+                    <p class="promo-description-small">Todo sabor do nosso hot dog especial com precinho camarada!</p>
+                    <a href="menu.html#lanches" class="cta-button small">Pedir Agora!</a>
+                </div>
+
+                <div class="promo-block promo-dessert">
+                     <img src="https://via.placeholder.com/300x180/9b59b6/ffffff?text=Sobremesa+OFF" alt="Sobremesa com Desconto">
+                     <h3>Adoce Seu Dia!</h3>
+                     <p class="discount-tag">15% OFF</p>
+                     <p class="combo-details">Em qualquer sobremesa do cardápio!</p>
+                     <a href="menu.html#sobremesas" class="cta-button secondary small">Ver Sobremesas</a>
+                </div>
+             </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Fryday's. Todos os direitos reservados.</p>
+            <div class="social-icons">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="Whatsapp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+    <script src="js/auth-nav.js" defer></script>
+</body>
+</html>

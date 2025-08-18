@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fryday's - Peça seu Lanche!</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">Fryday's</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="menu.html">Menus</a></li>
+                <li><a href="promocoes.html">Promoções</a></li>
+                <li><a href="contato.html">Contato</a></li>
+                <li id="loginNav"><a href="login.html">Login</a></li>
+                <li id="logoutNav" style="display: none;"><a href="#" id="logoutLink">Logout</a></li>
+            </ul>
+            <div class="nav-icons">
+                <a href="#" aria-label="Carrinho"><i class="fas fa-shopping-cart"></i></a>
+                <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Seção Principal (Hero) -->
+        <section id="hero">
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <h1>As melhores <br><span>Opções de Lanches</span><br> para você!</h1>
+                    <p>Hambúrgueres suculentos, pizzas deliciosas e muito mais, direto na sua casa.</p>
+                    <a href="menu.html" class="cta-button">VEJA AS OPÇÕES AGORA</a>
+                </div>
+                <div class="hero-image">
+                    <img src="https://i.ibb.co/StYmZtM/hero-food.png" alt="Hambúrguer e Pizza Deliciosos">
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Sobre/Bem-vindo -->
+        <section id="about" class="container">
+             <h2 class="section-title"><span>Bem-vindo</span> ao Fryday's!</h2>
+             <div class="about-content">
+                 <div class="about-image">
+                     <img src="https://i.ibb.co/Nnm18Y4/burger-explosion.png" alt="Ingredientes de Hambúrguer">
+                 </div>
+                 <div class="about-text">
+                     <p>É com grande alegria que recebemos você em nosso cantinho cheio de sabor, praticidade e diversão! Aqui, cada mordida é uma experiência única, preparada com carinho e os melhores ingredientes para satisfazer o seu paladar.</p>
+                     <p>Seja para um lanche rápido, uma refeição completa ou aquele desejo irresistível de algo doce, estamos prontos para servir você com qualidade e agilidade. Explore nosso cardápio recheado de opções deliciosas, desde clássicos atemporais até novidades que vão surpreender você.</p>
+                     <p><strong>Fryday's – Sabores que conquistam, momentos que ficam!</strong></p>
+                 </div>
+             </div>
+        </section>
+
+        <!-- Seção de Destaques/Menu Rápido -->
+        <section id="menu">
+            <div class="container">
+                <h2 class="section-title">Nossos <span>Destaques</span></h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <span class="discount-badge">50% OFF</span>
+                        <img src="https://i.ibb.co/pWcQ5Nt/burger-card.png" alt="Hambúrguer Clássico">
+                        <h3>Burger Top</h3>
+                        <p class="price">R$ 19,90</p>
+                        <button class="add-to-cart-btn" aria-label="Adicionar ao carrinho"><i class="fas fa-cart-plus"></i></button>
+                    </div>
+                    <div class="product-card">
+                         <img src="https://i.ibb.co/qCB7P9k/pizza-card.png" alt="Pizza Pepperoni">
+                         <h3>Pizza Pepperoni</h3>
+                         <p class="price">R$ 35,50</p>
+                         <button class="add-to-cart-btn" aria-label="Adicionar ao carrinho"><i class="fas fa-cart-plus"></i></button>
+                    </div>
+                     <div class="product-card">
+                        <span class="discount-badge special-badge">Combo!</span>
+                        <img src="https://i.ibb.co/bQ489wV/hotdog-card.png" alt="Hot Dog Especial">
+                        <h3>Hot Dog Delícia</h3>
+                        <p class="price">R$ 15,00</p>
+                        <button class="add-to-cart-btn" aria-label="Adicionar ao carrinho"><i class="fas fa-cart-plus"></i></button>
+                    </div>
+                     <div class="product-card">
+                        <img src="https://i.ibb.co/fC9r4G6/fries-card.png" alt="Batata Frita">
+                        <h3>Fritas Crocantes</h3>
+                        <p class="price">R$ 12,00</p>
+                        <button class="add-to-cart-btn" aria-label="Adicionar ao carrinho"><i class="fas fa-cart-plus"></i></button>
+                    </div>
+                </div>
+                <div class="see-more">
+                    <a href="menu.html" class="cta-button secondary">Ver Cardápio Completo</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Promoções -->
+        <section id="promocoes">
+             <div class="container">
+                 <h2 class="section-title light"><span>Promoções</span> Imperdíveis!</h2>
+                 <div class="promotions-grid">
+                     <div class="promo-block promo-1">
+                         <div class="promo-text">
+                             <h3>DOIS SMASH BURGERS</h3>
+                             <p>Por Apenas</p>
+                             <div class="price-tag">R$ 29<span>,99</span></div>
+                             <span class="promo-badge">2X</span>
+                         </div>
+                         <div class="promo-image">
+                              <img src="https://i.ibb.co/yqM0kXk/promo-double-burger.png" alt="Promoção Dois Smash Burgers">
+                         </div>
+                     </div>
+                     <div class="promo-block promo-2">
+                         <h3>Peça HOJE e Ganhe</h3>
+                         <p>UMA BATATA FRITA</p>
+                         <span>DE BRINDE!*</span>
+                         <img src="https://i.ibb.co/fC9r4G6/fries-card.png" alt="Batata Frita de Brinde">
+                         <small>*Em pedidos acima de R$ 40</small>
+                     </div>
+                      <div class="promo-block promo-3">
+                            <h3>HOJE É DIA DE <br><span>HOT DOG!</span></h3>
+                            <img src="https://i.ibb.co/bQ489wV/hotdog-card.png" alt="Promoção Hot Dog">
+                            <a href="#" class="cta-button small">Pedir Agora!</a>
+                      </div>
+                 </div>
+             </div>
+        </section>
+
+        <section id="contato" class="container">
+            <h2 class="section-title">Fale <span>Conosco</span></h2>
+            <p>Tem alguma dúvida ou sugestão? Entre em contato!</p>
+            <p>Telefone: (44) 99999-8888| Email: contatofryd@gmail.com</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Fryday's. Todos os direitos reservados.</p>
+            <div class="social-icons">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="Whatsapp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+    <script src="js/auth-nav.js" defer></script>
+</body>
+</html>
