@@ -1,3 +1,5 @@
+// --- START OF FILE server.js ---
+
 // Carrega as variáveis de ambiente do arquivo .env
 require('dotenv').config();
 
@@ -9,16 +11,16 @@ const rateLimit = require('express-rate-limit'); // Importa o rate limiter
 const db = require("./db");
 const app = require("./app.js");
 const authMiddleware = require('./authMiddleware');
-const { sendContactEmail } = require('./email-service'); // Importa nossa função de e-mail
+const isAdminMiddleware = require('./isAdminMiddleware'); 
+const { sendContactEmail } = require('./email-service'); 
 
 // --- CONFIGURAÇÃO DO LIMITADOR DE REQUISIÇÕES (RATE LIMITER) ---
-// Define que cada IP pode fazer no máximo 3 requisições a cada hora na rota de contato.
 const contactLimiter = rateLimit({
-	windowMs: 60 * 60 * 1000, // 1 hora em milissegundos
-	max: 3, // Máximo de 3 requisições
+	windowMs: 60 * 60 * 1000, 
+	max: 3, 
 	message: { message: 'Muitas tentativas de envio de e-mail deste IP. Tente novamente após uma hora.' },
-    standardHeaders: true, // Adiciona headers de rate limit na resposta
-    legacyHeaders: false, // Desativa os headers legados (X-RateLimit-*)
+    standardHeaders: true, 
+    legacyHeaders: false, 
 });
 
 
@@ -35,13 +37,9 @@ app.post('/login', async (req, res) => {
         if (!user) {
             return res.status(401).json({ message: "Email ou senha inválidos" });
         }
+        
 
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-            return res.status(401).json({ message: "Email ou senha inválidos" });
-        }
-
-        const payload = { id: user.id, email: user.email, username: user.username };
+        const payload = { id: user.id, email: user.email, username: user.username, is_admin: user.is_admin }; 
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         return res.status(200).json({ 
@@ -71,13 +69,14 @@ app.post('/register', async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         
-        await db.runAsync(
+        // AQUI USAMOS A RESPOSTA DA FUNÇÃO runAsync (que já tem ID e is_admin)
+        const newUserRecord = await db.runAsync( 
             "INSERT INTO users (email, username, password) VALUES (?, ?, ?)",
             [email, username, hashedPassword]
         );
         
-        const newUser = await db.getAsync("SELECT * FROM users WHERE email = ?", [email]);
-        const payload = { id: newUser.id, email: newUser.email, username: newUser.username };
+        // Não é mais necessário o db.getAsync, usamos o newUserRecord
+        const payload = { id: newUserRecord.id, email: newUserRecord.email, username: newUserRecord.username, is_admin: newUserRecord.is_admin }; 
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         return res.status(201).json({ 
@@ -99,18 +98,144 @@ app.get('/profile', authMiddleware, (req, res) => {
     });
 });
 
-// --- NOVA ROTA PARA ENVIAR E-MAIL DE CONTATO ---
-// Aplicamos o middleware de rate limit 'contactLimiter' apenas a esta rota.
+// --- ROTA DE ADMINISTRAÇÃO ---
+app.get('/admin/dashboard', isAdminMiddleware, (req, res) => {
+    res.status(200).json({
+        message: "Acesso Admin autorizado",
+        user: req.user,
+        dashboardData: {
+            totalUsers: db.mockUsers.length, 
+            menuItemsCount: db.mockMenuItems.length,
+            promotionsCount: db.mockPromotions.length,
+        }
+    });
+});
+
+// --- CRUD DE ITENS DO MENU ---
+
+// READ ALL (Público - para a página menu.html)
+app.get('/api/menu', async (req, res) => {
+    try {
+        const menuItems = await db.getAllAsync("SELECT * FROM menu_items"); 
+        res.status(200).json(menuItems);
+    } catch (error) {
+        console.error("Erro ao buscar menu:", error);
+        res.status(500).json({ message: "Erro ao buscar itens do menu." });
+    }
+});
+
+// READ FEATURED (Público - para a página index.html)
+app.get('/api/menu/featured', async (req, res) => {
+    try {
+        const featuredItems = await db.getAllAsync("SELECT * FROM menu_items WHERE is_featured = TRUE"); 
+        res.status(200).json(featuredItems);
+    } catch (error) {
+        console.error("Erro ao buscar destaques:", error);
+        res.status(500).json({ message: "Erro ao buscar itens em destaque." });
+    }
+});
+
+// CREATE (Apenas Admin)
+app.post('/api/menu', isAdminMiddleware, async (req, res) => {
+    const { name, description, price, category, image, discount_badge } = req.body;
+    if (!name || !price || !category || !image) {
+        return res.status(400).json({ message: "Nome, preço, categoria e imagem são obrigatórios." });
+    }
+    try {
+        const newMenuItem = await db.runAsync(
+            "INSERT INTO menu_items (name, description, price, category, image, discount_badge) VALUES (?, ?, ?, ?, ?, ?)",
+            [name, description || '', price, category, image, discount_badge || '']
+        );
+        res.status(201).json({ message: "Item de menu adicionado com sucesso!", item: newMenuItem });
+    } catch (error) {
+        console.error("Erro ao adicionar item do menu:", error);
+        res.status(500).json({ message: "Erro ao adicionar item do menu." });
+    }
+});
+
+// UPDATE (Apenas Admin - Usado para Destaques)
+app.put('/api/menu/:id', isAdminMiddleware, async (req, res) => {
+    const { id } = req.params;
+    const { is_featured, discount_badge } = req.body;
+    
+    const updateData = {};
+    if (is_featured !== undefined) updateData.is_featured = is_featured;
+    if (discount_badge !== undefined) updateData.discount_badge = discount_badge;
+
+    if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: "Nenhum campo de destaque fornecido para atualização." });
+    }
+
+    try {
+        const updatedItem = await db.updateAsync('menu_items', id, updateData);
+        res.status(200).json({ message: `Item ID ${id} atualizado com sucesso.`, item: updatedItem });
+    } catch (error) {
+        console.error("Erro ao atualizar item do menu:", error);
+        res.status(404).json({ message: error.message || "Item não encontrado ou erro na atualização." });
+    }
+});
+
+// DELETE (Apenas Admin)
+app.delete('/api/menu/:id', isAdminMiddleware, async (req, res) => {
+    const { id } = req.params;
+    try {
+        await db.deleteAsync('menu_items', id);
+        res.status(200).json({ message: `Item ID ${id} excluído com sucesso.` });
+    } catch (error) {
+        console.error("Erro ao excluir item do menu:", error);
+        res.status(404).json({ message: "Item não encontrado ou erro na exclusão." });
+    }
+});
+
+
+// --- CRUD DE PROMOÇÕES ---
+app.get('/api/promotions', isAdminMiddleware, async (req, res) => {
+    try {
+        const promotions = await db.getAllAsync("SELECT * FROM promotions"); 
+        res.status(200).json(promotions);
+    } catch (error) {
+        console.error("Erro ao buscar promoções:", error);
+        res.status(500).json({ message: "Erro ao buscar promoções." });
+    }
+});
+
+app.post('/api/promotions', isAdminMiddleware, async (req, res) => {
+    const { title, description, price, image } = req.body;
+    if (!title || !description || !price || !image) {
+        return res.status(400).json({ message: "Título, descrição, preço e imagem são obrigatórios para a promoção." });
+    }
+    try {
+        const newPromotion = await db.runAsync(
+            "INSERT INTO promotions (title, description, price, image) VALUES (?, ?, ?, ?)",
+            [title, description, price, image]
+        );
+        res.status(201).json({ message: "Promoção adicionada com sucesso!", item: newPromotion });
+    } catch (error) {
+        console.error("Erro ao adicionar promoção:", error);
+        res.status(500).json({ message: "Erro ao adicionar promoção." });
+    }
+});
+
+app.delete('/api/promotions/:id', isAdminMiddleware, async (req, res) => {
+    const { id } = req.params;
+    try {
+        await db.deleteAsync('promotions', id);
+        res.status(200).json({ message: `Promoção ID ${id} excluída com sucesso.` });
+    } catch (error) {
+        console.error("Erro ao excluir promoção:", error);
+        res.status(404).json({ message: "Promoção não encontrada ou erro na exclusão." });
+    }
+});
+
+// --- ROTA PARA ENVIAR E-MAIL DE CONTATO ---
 app.post('/contact', contactLimiter, async (req, res) => {
     const { user_name: name, user_email: email, user_phone: phone, user_subject: subject, user_message: message } = req.body;
 
-    // Validação simples dos campos
     if (!name || !email || !subject || !message) {
         return res.status(400).json({ message: "Todos os campos obrigatórios devem ser preenchidos." });
     }
 
     try {
-        // Usa a função do nosso módulo de e-mail para enviar o e-mail
         await sendContactEmail({ name, email, phone, subject, message });
         return res.status(200).json({ message: "Mensagem enviada com sucesso! Agradecemos o contato." });
     } catch (error) {
@@ -124,3 +249,4 @@ app.post('/contact', contactLimiter, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+// --- END OF FILE server.js ---

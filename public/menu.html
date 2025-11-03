@@ -1,3 +1,5 @@
+<!-- --- START OF FILE menu.html --- -->
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -20,6 +22,7 @@
                 <li><a href="menu.html" class="active">Menus</a></li>
                 <li><a href="promocoes.html">Promoções</a></li>
                 <li><a href="contato.html">Contato</a></li>
+                <li id="adminNav" style="display: none;"><a href="admin.html">Admin</a></li> <!-- NOVO -->
                 <li id="loginNav"><a href="login.html">Login</a></li>
                 <li id="logoutNav" style="display: none;"><a href="#" id="logoutLink">Logout</a></li>
             </ul>
@@ -39,103 +42,9 @@
         </section>
 
         <div class="container menu-container">
-            <section id="hamburgueres" class="menu-category">
-                <h2 class="category-title"><span>//</span> Hambúrgueres Artesanais</h2>
-                <div class="menu-grid">
-                    <div class="menu-item-card">
-                        <img src="https://i.ibb.co/StYmZtM/hero-food.png" alt="Burger Clássico">
-                        <div class="item-details">
-                            <h3>Clássico Fryday's</h3>
-                            <p class="description">Pão brioche, burger bovino 150g, queijo cheddar, alface, tomate e molho especial da casa.</p>
-                            <p class="price">R$ 25,90</p>
-                            <button class="add-to-cart-btn small" aria-label="Adicionar Clássico Fryday's ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
-                        </div>
-                    </div>
-                    <div class="menu-item-card">
-                         <img src="https://i.ibb.co/yqM0kXk/promo-double-burger.png" alt="Burger Duplo Bacon">
-                         <div class="item-details">
-                             <h3>Duplo Bacon Paradise</h3>
-                             <p class="description">Pão australiano, 2x burgers bovinos 100g, dobro de queijo cheddar, bacon crocante e cebola caramelizada.</p>
-                             <p class="price">R$ 32,50</p>
-                             <button class="add-to-cart-btn small" aria-label="Adicionar Duplo Bacon Paradise ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
-                         </div>
-                     </div>
-                     <div class="menu-item-card">
-                          <img src="https://via.placeholder.com/300x200/2ecc71/ffffff?text=Veggie+Burger" alt="Burger Vegetariano">
-                          <div class="item-details">
-                              <h3>Veggie Delight</h3>
-                              <p class="description">Pão integral, burger à base de plantas, queijo muçarela, rúcula, tomate seco e maionese de ervas.</p>
-                              <p class="price">R$ 28,00</p>
-                              <button class="add-to-cart-btn small" aria-label="Adicionar Veggie Delight ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
-                          </div>
-                      </div>
-                </div>
-            </section>
-
-            <section id="pizzas" class="menu-category">
-                <h2 class="category-title"><span>//</span> Pizzas</h2>
-                 <div class="menu-grid">
-                     <div class="menu-item-card">
-                         <img src="https://i.ibb.co/qCB7P9k/pizza-card.png" alt="Pizza Pepperoni">
-                         <div class="item-details">
-                             <h3>Pepperoni Clássica</h3>
-                             <p class="description">Molho de tomate artesanal, muçarela de primeira e fatias generosas de pepperoni.</p>
-                             <p class="price">R$ 45,00</p>
-                              <button class="add-to-cart-btn small" aria-label="Adicionar Pizza Pepperoni ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
-                         </div>
-                     </div>
-                     <div class="menu-item-card">
-                         <img src="https://via.placeholder.com/300x200/e74c3c/ffffff?text=Pizza+Calabresa" alt="Pizza Calabresa">
-                         <div class="item-details">
-                             <h3>Calabresa com Cebola</h3>
-                             <p class="description">Molho de tomate, muçarela, calabresa fatiada selecionada e rodelas de cebola.</p>
-                             <p class="price">R$ 42,00</p>
-                              <button class="add-to-cart-btn small" aria-label="Adicionar Pizza Calabresa ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
-                         </div>
-                     </div>
-                      <div class="menu-item-card">
-                         <img src="https://via.placeholder.com/300x200/f1c40f/000000?text=Pizza+Frango+Catupiry" alt="Pizza Frango com Catupiry">
-                         <div class="item-details">
-                             <h3>Frango com Catupiry®</h3>
-                             <p class="description">Molho de tomate, muçarela, frango desfiado temperado e o autêntico Catupiry®.</p>
-                             <p class="price">R$ 48,00</p>
-                              <button class="add-to-cart-btn small" aria-label="Adicionar Pizza Frango Catupiry ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
-                         </div>
-                     </div>
-                 </div>
-            </section>
-
-            <section id="bebidas" class="menu-category">
-                <h2 class="category-title"><span>//</span> Bebidas</h2>
-                <div class="menu-grid simple-grid">
-                    <div class="menu-item-card simple-card">
-                        <img src="https://via.placeholder.com/150x150/3498db/ffffff?text=Refrigerante" alt="Refrigerante Lata">
-                        <div class="item-details">
-                            <h3>Refrigerante Lata</h3>
-                            <p class="description">Coca-Cola, Guaraná, Fanta (350ml)</p>
-                            <p class="price">R$ 5,00</p>
-                             <button class="add-to-cart-btn small" aria-label="Adicionar Refrigerante ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
-                        </div>
-                    </div>
-                     <div class="menu-item-card simple-card">
-                        <img src="https://via.placeholder.com/150x150/27ae60/ffffff?text=Suco+Natural" alt="Suco Natural">
-                        <div class="item-details">
-                            <h3>Suco Natural</h3>
-                            <p class="description">Laranja, Abacaxi com Hortelã (500ml)</p>
-                            <p class="price">R$ 8,00</p>
-                             <button class="add-to-cart-btn small" aria-label="Adicionar Suco ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
-                        </div>
-                    </div>
-                     <div class="menu-item-card simple-card">
-                        <img src="https://via.placeholder.com/150x150/95a5a6/ffffff?text=Água+Mineral" alt="Água Mineral">
-                        <div class="item-details">
-                            <h3>Água Mineral</h3>
-                            <p class="description">Com ou sem gás (500ml)</p>
-                            <p class="price">R$ 3,00</p>
-                             <button class="add-to-cart-btn small" aria-label="Adicionar Água ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
-                        </div>
-                    </div>
-                </div>
+            <!-- Os itens serão populados aqui pelo script em breve -->
+            <section id="menu-all-items">
+                <!-- Conteúdo original removido para ser gerado pelo JS -->
             </section>
         </div>
     </main>
@@ -151,5 +60,6 @@
         </div>
     </footer>
     <script src="js/auth-nav.js" defer></script>
+    <script src="js/menu.js" defer></script> <!-- NOVO SCRIPT PARA CARREGAR ITENS DA API -->
 </body>
 </html>

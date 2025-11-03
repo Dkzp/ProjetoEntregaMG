@@ -1563,3 +1563,215 @@ body {
 #logoutBtn:hover {
     background-color: #a92525; /* Vermelho escuro ao passar o mouse */
 }
+
+/* --- Estilos para a página de Admin (Visual Fryday's) --- */
+
+.admin-page-content {
+    background: linear-gradient(rgba(211, 47, 47, 0.9), rgba(211, 47, 47, 0.7)), url('https://www.transparenttextures.com/patterns/food.png');
+    background-color: var(--primary-color);
+    padding: 60px 20px;
+    flex-grow: 1; 
+    display: flex;
+    align-items: flex-start; /* Alinha no topo */
+    justify-content: center;
+}
+
+.admin-container {
+    max-width: 900px;
+}
+
+.admin-card {
+    background-color: var(--light-color);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.admin-main-title {
+    font-family: var(--font-title);
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.admin-main-title i {
+    color: var(--secondary-color);
+    margin-left: 10px;
+}
+
+.admin-subtitle {
+    font-family: var(--font-primary);
+    color: var(--text-color);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.admin-subtitle span {
+    color: var(--secondary-color);
+}
+
+.tab-menu {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.tab-menu .tab-btn {
+    /* Estilos baseados em cta-button.secondary, mas com um hover mais discreto */
+    font-size: 1rem;
+    padding: 10px 25px;
+    box-shadow: none;
+}
+
+.tab-menu .tab-btn:hover {
+     transform: none;
+}
+
+/* Estado Ativo do Botão de Aba */
+.tab-menu .tab-btn:not(.secondary) {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    font-weight: 700;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+.tab-menu .tab-btn.secondary {
+    background-color: var(--bg-light-gray);
+    color: var(--dark-color);
+    border: 1px solid #ddd;
+}
+.tab-menu .tab-btn.secondary:hover {
+    background-color: #eee;
+}
+
+
+.admin-section-title {
+    font-family: var(--font-title);
+    color: var(--secondary-color);
+    font-size: 1.8rem;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+
+/* Formulário de Adição */
+.admin-form .input-group {
+    margin-bottom: 15px;
+}
+.admin-form .auth-btn {
+    background-color: var(--primary-color);
+}
+.admin-form textarea {
+    min-height: 80px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+    font-size: 1rem;
+}
+
+
+/* Lista de Itens (CRUD) */
+.admin-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.admin-item-card {
+    background-color: var(--bg-light-gray);
+    border: 1px solid #ffcc80; /* Borda suave laranja */
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.admin-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+}
+
+.admin-item-card .item-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    text-align: left;
+}
+
+.admin-item-card p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark-color);
+}
+
+.admin-item-card small {
+    color: var(--text-color);
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.admin-item-card .delete-btn-style {
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    font-weight: bold;
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+}
+.admin-item-card .delete-btn-style:hover {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+}
+
+/* Mensagens de Feedback */
+.admin-message {
+    text-align: center;
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 5px;
+    font-weight: bold;
+    display: block !important;
+}
+.admin-message.error {
+    background-color: #f8d7da; /* Vermelho claro */
+    color: #721c24; /* Vermelho escuro */
+    border: 1px solid #f5c6cb;
+}
+.admin-message.success {
+    background-color: #d4edda; /* Verde claro */
+    color: #155724; /* Verde escuro */
+    border: 1px solid #c3e6cb;
+}
+
+
+/* Responsividade do Admin */
+@media (max-width: 768px) {
+    .admin-card {
+        padding: 20px;
+    }
+    .admin-main-title {
+        font-size: 2rem;
+    }
+    .admin-item-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .admin-item-card .item-info {
+        margin-bottom: 10px;
+    }
+    .admin-item-card .delete-btn-style {
+        width: 100%;
+    }
+}

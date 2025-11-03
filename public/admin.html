@@ -1,0 +1,104 @@
+<!-- --- START OF FILE admin.html --- -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Fryday's Gerenciamento</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Reutiliza o CSS de login para estilos de formulário -->
+    <link rel="stylesheet" href="css/login-page.css"> 
+</head>
+<body>
+    
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">Fryday's</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menus</a></li>
+                <li><a href="promocoes.html">Promoções</a></li>
+                <li><a href="contato.html">Contato</a></li>
+                <li id="adminNav" style="display: none;"><a href="admin.html" class="active">Admin</a></li>
+                <li id="loginNav" style="display: none;"><a href="login.html">Login</a></li>
+                <li id="logoutNav" style="display: none;"><a href="#" id="logoutLink">Logout</a></li>
+            </ul>
+            <div class="nav-icons">
+                <a href="#" aria-label="Carrinho"><i class="fas fa-shopping-cart"></i></a>
+                <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Usaremos 'admin-page-content' para o background e padding -->
+    <main class="admin-page-content"> 
+        <div class="container admin-container"> 
+            
+            <div class="admin-card">
+                <h1 class="admin-main-title">Painel de Administração <i class="fas fa-tools"></i></h1>
+                <p class="admin-subtitle">Gerencie o conteúdo do seu site, <span id="admin-username">Admin Fryday</span></p>
+
+                <!-- SELEÇÃO DE ABA -->
+                <div class="tab-menu">
+                     <!-- Cta-button é o botão ativo por padrão -->
+                     <button class="cta-button small tab-btn" id="menuTab">Gerenciar Menu</button>
+                     <button class="cta-button secondary small tab-btn" id="promoTab">Gerenciar Promoções</button>
+                </div>
+
+                <!-- MENSAGENS GERAIS (Sucesso/Erro de Exclusão) -->
+                <div id="general-messages" class="admin-message" aria-live="polite" style="display: none; margin-bottom: 20px;"></div>
+
+                <!-- ABA DE MENU -->
+                <div id="menuContent" style="display: none;">
+                    <h2 class="admin-section-title">Adicionar Novo Item ao Menu</h2>
+                    <form id="addMenuItemForm" class="admin-form">
+                        <div class="input-group"><input type="text" id="menuName" placeholder="Nome do Item (ex: Veggie Burger)" required></div>
+                        <div class="input-group"><input type="text" id="menuCategory" placeholder="Categoria (ex: hamburgueres, pizzas, bebidas)" required></div>
+                        <div class="input-group"><input type="number" id="menuPrice" placeholder="Preço (ex: 29.90)" step="0.01" required></div>
+                        <div class="input-group"><input type="text" id="menuImage" placeholder="URL da Imagem (ex: https://i.ibb.co/...)" required></div>
+                        <div class="input-group"><textarea id="menuDescription" placeholder="Descrição (opcional)"></textarea></div>
+                        <button type="submit" class="auth-btn">Adicionar Item</button>
+                        <div id="menu-messages" class="admin-message" style="margin-top: 10px; display: none;" aria-live="polite"></div>
+                    </form>
+
+                    <h2 class="admin-section-title">Itens Atuais do Menu</h2>
+                    <div id="menuList" class="admin-list">
+                        <!-- Itens do menu serão injetados aqui pelo JS -->
+                    </div>
+                </div>
+
+                <!-- ABA DE PROMOÇÕES -->
+                <div id="promoContent" style="display: none;">
+                    
+                    <h2 class="admin-section-title">Adicionar Nova Promoção</h2>
+                    <form id="addPromotionForm" class="admin-form">
+                        <div class="input-group"><input type="text" id="promoTitle" placeholder="Título da Promoção (ex: DOIS SMASH BURGERS)" required></div>
+                        <div class="input-group"><input type="number" id="promoPrice" placeholder="Preço (ex: 29.99 ou 0 para Brinde)" step="0.01" required></div>
+                        <div class="input-group"><input type="text" id="promoImage" placeholder="URL da Imagem (ex: https://i.ibb.co/...)" required></div>
+                        <div class="input-group"><textarea id="promoDescription" placeholder="Descrição completa da promoção" required></textarea></div>
+                        <button type="submit" class="auth-btn">Adicionar Promoção</button>
+                        <div id="promo-messages" class="admin-message" style="margin-top: 10px; display: none;" aria-live="polite"></div>
+                    </form>
+                    
+                     <h2 class="admin-section-title">Promoções Atuais</h2>
+                     <div id="promoList" class="admin-list">
+                         <!-- Promoções serão injetadas aqui pelo JS -->
+                     </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Fryday's. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    
+    <script src="js/admin.js"></script>
+    <script src="js/auth-nav.js" defer></script>
+</body>
+</html>
+<!-- --- END OF FILE admin.html --- -->
