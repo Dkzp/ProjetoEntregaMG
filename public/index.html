@@ -1,5 +1,3 @@
-<!-- --- START OF FILE index.html --- -->
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -22,12 +20,15 @@
                 <li><a href="menu.html">Menus</a></li>
                 <li><a href="promocoes.html">Promoções</a></li>
                 <li><a href="contato.html">Contato</a></li>
-                <li id="adminNav" style="display: none;"><a href="admin.html">Admin</a></li> <!-- NOVO -->
+                <li id="adminNav" style="display: none;"><a href="admin.html">Admin</a></li>
                 <li id="loginNav"><a href="login.html">Login</a></li>
                 <li id="logoutNav" style="display: none;"><a href="#" id="logoutLink">Logout</a></li>
             </ul>
             <div class="nav-icons">
-                <a href="#" aria-label="Carrinho"><i class="fas fa-shopping-cart"></i></a>
+                <a href="carrinho.html" aria-label="Carrinho" class="cart-icon-link" style="position: relative;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count-badge" style="display: none;"></span>
+                </a>
                 <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
             </div>
         </nav>
@@ -67,33 +68,8 @@
         <section id="menu">
             <div class="container">
                 <h2 class="section-title">Nossos <span>Destaques</span></h2>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <span class="discount-badge">50% OFF</span>
-                        <img src="https://i.ibb.co/pWcQ5Nt/burger-card.png" alt="Hambúrguer Clássico">
-                        <h3>Burger Top</h3>
-                        <p class="price">R$ 19,90</p>
-                        <button class="add-to-cart-btn" aria-label="Adicionar ao carrinho"><i class="fas fa-cart-plus"></i></button>
-                    </div>
-                    <div class="product-card">
-                         <img src="https://i.ibb.co/qCB7P9k/pizza-card.png" alt="Pizza Pepperoni">
-                         <h3>Pizza Pepperoni</h3>
-                         <p class="price">R$ 35,50</p>
-                         <button class="add-to-cart-btn" aria-label="Adicionar ao carrinho"><i class="fas fa-cart-plus"></i></button>
-                    </div>
-                     <div class="product-card">
-                        <span class="discount-badge special-badge">Combo!</span>
-                        <img src="https://i.ibb.co/bQ489wV/hotdog-card.png" alt="Hot Dog Especial">
-                        <h3>Hot Dog Delícia</h3>
-                        <p class="price">R$ 15,00</p>
-                        <button class="add-to-cart-btn" aria-label="Adicionar ao carrinho"><i class="fas fa-cart-plus"></i></button>
-                    </div>
-                     <div class="product-card">
-                        <img src="https://i.ibb.co/fC9r4G6/fries-card.png" alt="Batata Frita">
-                        <h3>Fritas Crocantes</h3>
-                        <p class="price">R$ 12,00</p>
-                        <button class="add-to-cart-btn" aria-label="Adicionar ao carrinho"><i class="fas fa-cart-plus"></i></button>
-                    </div>
+                <div id="featured-items-grid" class="product-grid">
+                    <p style="text-align: center; grid-column: 1/-1;">Carregando destaques...</p>
                 </div>
                 <div class="see-more">
                     <a href="menu.html" class="cta-button secondary">Ver Cardápio Completo</a>
@@ -105,30 +81,8 @@
         <section id="promocoes">
              <div class="container">
                  <h2 class="section-title light"><span>Promoções</span> Imperdíveis!</h2>
-                 <div class="promotions-grid">
-                     <div class="promo-block promo-1">
-                         <div class="promo-text">
-                             <h3>DOIS SMASH BURGERS</h3>
-                             <p>Por Apenas</p>
-                             <div class="price-tag">R$ 29<span>,99</span></div>
-                             <span class="promo-badge">2X</span>
-                         </div>
-                         <div class="promo-image">
-                              <img src="https://i.ibb.co/yqM0kXk/promo-double-burger.png" alt="Promoção Dois Smash Burgers">
-                         </div>
-                     </div>
-                     <div class="promo-block promo-2">
-                         <h3>Peça HOJE e Ganhe</h3>
-                         <p>UMA BATATA FRITA</p>
-                         <span>DE BRINDE!*</span>
-                         <img src="https://i.ibb.co/fC9r4G6/fries-card.png" alt="Batata Frita de Brinde">
-                         <small>*Em pedidos acima de R$ 40</small>
-                     </div>
-                      <div class="promo-block promo-3">
-                            <h3>HOJE É DIA DE <br><span>HOT DOG!</span></h3>
-                            <img src="https://i.ibb.co/bQ489wV/hotdog-card.png" alt="Promoção Hot Dog">
-                            <a href="#" class="cta-button small">Pedir Agora!</a>
-                      </div>
+                 <div id="promotions-grid" class="promotions-grid">
+                     <p style="text-align: center; grid-column: 1/-1; color: white;">Carregando promoções...</p>
                  </div>
              </div>
         </section>
@@ -151,6 +105,10 @@
             </div>
         </div>
     </footer>
+    
+    <script src="js/cart.js"></script>
+    <script src="js/index-featured.js"></script>
+    <script src="js/index-promotions.js"></script>
     <script src="js/auth-nav.js" defer></script>
 </body>
 </html>

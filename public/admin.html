@@ -26,9 +26,12 @@
                 <li id="logoutNav" style="display: none;"><a href="#" id="logoutLink">Logout</a></li>
             </ul>
             <div class="nav-icons">
-                <a href="#" aria-label="Carrinho"><i class="fas fa-shopping-cart"></i></a>
-                <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
-            </div>
+    <a href="carrinho.html" aria-label="Carrinho" class="cart-icon-link" style="position: relative;">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count-badge" style="display: none;"></span>
+    </a>
+    <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
+</div>
         </nav>
     </header>
 
@@ -99,6 +102,7 @@
     
     <script src="js/admin.js"></script>
     <script src="js/auth-nav.js" defer></script>
+    <script src="js/cart.js"></script>
 </body>
 </html>
 <!-- --- END OF FILE admin.html --- -->

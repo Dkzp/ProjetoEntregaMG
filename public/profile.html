@@ -21,14 +21,18 @@
                 <li><a href="menu.html">Menus</a></li>
                 <li><a href="promocoes.html">Promoções</a></li>
                 <li><a href="contato.html">Contato</a></li>
+                <li id="adminNav" style="display: none;"><a href="admin.html">Admin</a></li>
                 <!-- Links dinâmicos que o JS vai controlar -->
                 <li id="loginNav" style="display: none;"><a href="login.html">Login</a></li>
                 <li id="logoutNav" style="display: none;"><a href="#" id="logoutLink">Logout</a></li>
             </ul>
             <div class="nav-icons">
-                <a href="#" aria-label="Carrinho"><i class="fas fa-shopping-cart"></i></a>
-                <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
-            </div>
+    <a href="carrinho.html" aria-label="Carrinho" class="cart-icon-link" style="position: relative;">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count-badge" style="display: none;"></span>
+    </a>
+    <a href="login.html" id="profileLink" aria-label="Login/Usuário"><i class="fas fa-user-circle"></i></a>
+</div>
         </nav>
     </header>
 
@@ -53,5 +57,6 @@
     <script src="js/profile.js"></script>
     <!-- Script que atualiza a navegação em todas as páginas -->
     <script src="js/auth-nav.js" defer></script>
+    <script src="js/cart.js"></script>
 </body>
 </html>

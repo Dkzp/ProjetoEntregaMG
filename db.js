@@ -1,206 +1,426 @@
-// --- START OF FILE db.js ---
-// Importa o cliente Supabase e o dotenv para garantir que as variáveis de ambiente sejam carregadas
+// --- db.js COMPLETO COM SUPORTE A CARRINHO (CORRIGIDO) ---
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
-const bcrypt = require("bcrypt");
 
-// Configuração do Supabase, lendo as variáveis de ambiente
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// Verifica se as credenciais foram fornecidas no .env
 if (!supabaseUrl || !supabaseKey) {
-    console.warn("AVISO: Variáveis Supabase não configuradas. Usando dados MOCKADOS para CRUD de Admin.");
+    throw new Error('❌ ERRO: Variáveis NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY devem estar configuradas no .env');
 }
 
-const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
-
-
-// --- MOCK DE DADOS PARA SIMULAÇÃO ---
-const HASHED_PASSWORD_123456 = '$2b$10$v7KzE.yS1QWpG5gX7y8U0O9p8t6E5y3WqE8H.N4c'; 
-
-let mockUsers = [
-    // Usuários mockados permanecem para o login admin/teste
-    { id: 1, email: 'admin@frydays.com', username: 'Admin Fryday', password: HASHED_PASSWORD_123456, is_admin: true }, 
-    { id: 2, email: 'user@teste.com', username: 'Usuário Teste', password: HASHED_PASSWORD_123456, is_admin: false }
-];
-let mockMenuItems = [
-    { id: 1, name: 'Clássico Fryday\'s', description: 'Pão brioche, burger bovino 150g, queijo cheddar, alface, tomate e molho especial da casa.', price: 25.90, category: 'hamburgueres', image: 'https://i.ibb.co/pWcQ5Nt/burger-card.png', is_featured: true, discount_badge: '50% OFF' }, 
-    { id: 2, name: 'Duplo Bacon Paradise', description: 'Pão australiano, 2x burgers bovinos 100g, dobro de queijo cheddar, bacon crocante e cebola caramelizada.', price: 32.50, category: 'hamburgueres', image: 'https://i.ibb.co/yqM0kXk/promo-double-burger.png', is_featured: false, discount_badge: '' }, 
-    { id: 3, name: 'Pepperoni Clássica', description: 'Molho de tomate artesanal, muçarela de primeira e fatias generosas de pepperoni.', price: 45.00, category: 'pizzas', image: 'https://i.ibb.co/qCB7P9k/pizza-card.png', is_featured: true, discount_badge: '' }, 
-    { id: 4, name: 'Hot Dog Delícia', description: 'Salsicha especial, molho da casa, purê de batata, milho e queijo ralado.', price: 15.00, category: 'lanches', image: 'https://i.ibb.co/bQ489wV/hotdog-card.png', is_featured: true, discount_badge: 'Combo!' }, 
-    { id: 5, name: 'Fritas Crocantes', description: 'Batata frita tradicional, extra crocante e com tempero especial.', price: 12.00, category: 'acompanhamentos', image: 'https://i.ibb.co/fC9r4G6/fries-card.png', is_featured: true, discount_badge: '' }, 
-    { id: 6, name: 'Refrigerante Lata', description: 'Coca-Cola, Guaraná, Fanta (350ml)', price: 5.00, category: 'bebidas', image: 'https://via.placeholder.com/150x150/3498db/ffffff?text=Refrigerante', is_featured: false, discount_badge: '' }, 
-];
-let mockPromotions = [
-    { id: 1, title: 'DOIS SUPER SMASH BURGERS', description: 'Leve dois Smash Burgers por um preço inacreditável!', price: 29.99, image: 'https://i.ibb.co/yqM0kXk/promo-double-burger.png', promo_type: 'highlight_1' }, 
-    { id: 2, title: 'Fritas de Brinde', description: 'Em pedidos acima de R$ 40, ganhe uma batata frita de brinde!', price: 0, image: 'https://i.ibb.co/fC9r4G6/fries-card.png', promo_type: 'highlight_2' }, 
-    { id: 3, title: 'Hot Dog Day', description: 'Todo sabor do nosso hot dog especial com precinho camarada!', price: 15.00, image: 'https://i.ibb.co/bQ489wV/hotdog-card.png', promo_type: 'highlight_3' }, 
-    { id: 4, title: 'Combo Pizza Família', description: '1 Pizza Grande (sabores selecionados) + 1 Refri 2L. De R$ 65,00 por R$ 55,00', price: 55.00, image: 'https://via.placeholder.com/300x180/e74c3c/ffffff?text=Pizza+G+Refri', promo_type: 'promo_page' },
-];
-
-let nextUserId = 3;
-let nextMenuItemId = 7;
-let nextPromotionId = 5;
-
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const db = {
     /**
-     * Função para buscar um único registro (equivalente ao db.get do SQLite).
-     * Esta função é crucial para o LOGIN e para verificar se o EMAIL JÁ EXISTE.
+     * Buscar um único registro (usado no LOGIN)
      */
     getAsync: async (query, params) => {
-        if (query.toUpperCase().startsWith('SELECT')) {
+        if (query.toUpperCase().includes('FROM USERS')) {
             const email = params[0];
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('email', email)
+                .maybeSingle();
 
-            // 1. Tenta buscar o usuário no Supabase real
-            if (supabase && query.toUpperCase().includes('FROM USERS')) {
-                 const { data, error } = await supabase
-                     .from('users')
-                     .select('id, email, password, username, is_admin') // Seleciona campos para login
-                     .eq('email', email)
-                     .maybeSingle();
- 
-                 if (data) {
-                     // Adiciona is_admin: false se não existir no DB (para evitar crashs)
-                     return { ...data, is_admin: data.is_admin || false }; 
-                 }
-                 
-                 // Se deu erro ou não encontrou, continua para o mock (para o admin@frydays.com)
+            if (error) {
+                console.error('Erro ao buscar usuário:', error);
+                return null;
             }
-            
-            // 2. Se falhou na busca real, busca nos usuários mockados (apenas admin/teste)
-            if (query.toUpperCase().includes('FROM USERS')) {
-                const user = mockUsers.find(u => u.email === email);
-                if (user) return { ...user };
-            }
+            return data;
         }
-        
-        console.error('Query não suportada no adaptador Supabase (getAsync):', query);
-        // Não lançar erro se não for usuário, retorna null
-        return null;
+
+        throw new Error('Query não suportada em getAsync: ' + query);
     },
 
     /**
-     * Função para executar uma ação, como INSERT (equivalente ao db.run do SQLite).
+     * Inserir um novo registro (usado no REGISTER e CREATE)
      */
     runAsync: async (query, params) => {
         if (query.toUpperCase().startsWith('INSERT')) {
             const tableMatch = query.match(/INTO\s+(\w+)/i);
             const columnsMatch = query.match(/\((.+?)\)/);
-            
-            if (tableMatch && columnsMatch) {
-                const table = tableMatch[1];
-                const columns = columnsMatch[1].split(',').map(c => c.trim());
-                
-                const record = {};
-                columns.forEach((col, index) => {
-                    record[col] = params[index];
-                });
-                
-                // LÓGICA CORRIGIDA PARA INSERT DE USUÁRIOS NO SUPABASE REAL
-                if (table.toUpperCase() === 'USERS' && supabase) {
-                     // O objeto record já tem email, username, password
-                     // Adicione is_admin manualmente (false por padrão)
-                     record.is_admin = false; 
 
-                     const { data, error } = await supabase
-                        .from('users')
-                        .insert(record)
-                        .select('id, email, username, is_admin'); // Seleciona o que é necessário para o token
-                     
-                    if (error) {
-                        console.error("Erro no INSERT de usuário no Supabase:", error.message);
-                        throw error;
-                    }
-                    // Retorna o primeiro elemento do array de dados inseridos
-                    return data[0]; 
-                }
+            if (!tableMatch || !columnsMatch) {
+                throw new Error('Query INSERT mal formatada');
+            }
 
-                // Lógica de mock para tabelas de Admin
-                if (table.toUpperCase() === 'MENU_ITEMS') {
-                    record.id = nextMenuItemId++;
-                    record.price = parseFloat(record.price);
-                    record.is_featured = false; 
-                    record.discount_badge = record.discount_badge || '';
-                    mockMenuItems.push(record);
-                    return { ...record };
+            const table = tableMatch[1];
+            const columns = columnsMatch[1].split(',').map(c => c.trim());
+
+            const record = {};
+            columns.forEach((col, index) => {
+                record[col] = params[index];
+            });
+
+            // INSERT em USERS
+            if (table.toLowerCase() === 'users') {
+                record.is_admin = false;
+
+                const { data, error } = await supabase
+                    .from('users')
+                    .insert(record)
+                    .select('id, email, username, is_admin')
+                    .single();
+
+                if (error) {
+                    console.error('Erro ao inserir usuário:', error);
+                    throw error;
                 }
-                
-                if (table.toUpperCase() === 'PROMOTIONS') {
-                    record.id = nextPromotionId++;
-                    record.price = parseFloat(record.price);
-                    mockPromotions.push(record);
-                    return { ...record };
+                return data;
+            }
+
+            // INSERT em MENU_ITEMS
+            if (table.toLowerCase() === 'menu_items') {
+                record.price = parseFloat(record.price);
+                record.is_featured = false;
+                record.discount_badge = record.discount_badge || '';
+
+                const { data, error } = await supabase
+                    .from('menu_items')
+                    .insert(record)
+                    .select()
+                    .single();
+
+                if (error) {
+                    console.error('Erro ao inserir menu item:', error);
+                    throw error;
                 }
+                return data;
+            }
+
+            // INSERT em PROMOTIONS
+            if (table.toLowerCase() === 'promotions') {
+                record.price = parseFloat(record.price);
+
+                const { data, error } = await supabase
+                    .from('promotions')
+                    .insert(record)
+                    .select()
+                    .single();
+
+                if (error) {
+                    console.error('Erro ao inserir promoção:', error);
+                    throw error;
+                }
+                return data;
             }
         }
-        console.error('Query não suportada no adaptador Supabase (runAsync):', query);
-        throw new Error('Query não suportada no adaptador Supabase');
+
+        throw new Error('Query não suportada em runAsync: ' + query);
     },
-    
+
     /**
-     * Função para buscar múltiplos registros (simulando db.all do SQLite).
+     * Buscar múltiplos registros (usado para listar MENU e PROMOÇÕES)
      */
     getAllAsync: async (query) => {
+        // MENU ITEMS - TODOS
         if (query.toUpperCase().includes('FROM MENU_ITEMS')) {
-             if (query.toUpperCase().includes('WHERE IS_FEATURED = TRUE')) { 
-                return mockMenuItems.filter(item => item.is_featured === true);
+            let queryBuilder = supabase.from('menu_items').select('*');
+
+            // MENU ITEMS - APENAS FEATURED
+            if (query.toUpperCase().includes('WHERE IS_FEATURED = TRUE')) {
+                queryBuilder = queryBuilder.eq('is_featured', true);
             }
-            return mockMenuItems;
+
+            const { data, error } = await queryBuilder;
+
+            if (error) {
+                console.error('Erro ao buscar menu items:', error);
+                throw error;
+            }
+            return data || [];
         }
+
+        // PROMOTIONS
         if (query.toUpperCase().includes('FROM PROMOTIONS')) {
-            return mockPromotions;
+            const { data, error } = await supabase
+                .from('promotions')
+                .select('*');
+
+            if (error) {
+                console.error('Erro ao buscar promoções:', error);
+                throw error;
+            }
+            return data || [];
         }
-        console.error('Query não suportada no adaptador Supabase (getAllAsync):', query);
-        throw new Error('Query não suportada no adaptador Supabase');
+
+        throw new Error('Query não suportada em getAllAsync: ' + query);
     },
-    
+
     /**
-     * Simula UPDATE, necessário para o is_featured
+     * Atualizar um registro (usado para mudar IS_FEATURED e DISCOUNT_BADGE)
      */
     updateAsync: async (table, id, data) => {
         const parsedId = parseInt(id);
-        if (table.toUpperCase() === 'MENU_ITEMS') {
-            const index = mockMenuItems.findIndex(item => item.id === parsedId);
-            if (index > -1) {
-                if (data.is_featured !== undefined) {
-                    data.is_featured = data.is_featured === 'true' || data.is_featured === true;
-                }
-                mockMenuItems[index] = { ...mockMenuItems[index], ...data };
-                return mockMenuItems[index];
+
+        if (table.toLowerCase() === 'menu_items') {
+            // Converter is_featured para boolean se necessário
+            if (data.is_featured !== undefined) {
+                data.is_featured = data.is_featured === 'true' || data.is_featured === true;
             }
-            throw new Error('Item de Menu não encontrado para atualização.');
+
+            const { data: updated, error } = await supabase
+                .from('menu_items')
+                .update(data)
+                .eq('id', parsedId)
+                .select()
+                .single();
+
+            if (error) {
+                console.error('Erro ao atualizar menu item:', error);
+                throw new Error('Item não encontrado ou erro na atualização.');
+            }
+            return updated;
         }
-         
-        throw new Error('Tabela não suportada para atualização.');
+
+        throw new Error('Tabela não suportada para atualização: ' + table);
     },
 
     /**
-     * Simula DELETE
+     * Deletar um registro
      */
-    deleteAsync: async (table, id) => {
-        const parsedId = parseInt(id);
+    /**
+ * Deletar um registro (COM LOGS DE DEBUG)
+ */
+deleteAsync: async (table, id) => {
+    console.log('🗑️ deleteAsync chamado:', { table, id, tipo: typeof id });
+    
+    const parsedId = parseInt(id);
+    console.log('🔢 ID parseado:', parsedId);
 
-        if (table.toUpperCase() === 'MENU_ITEMS') {
-            const initialLength = mockMenuItems.length;
-            mockMenuItems = mockMenuItems.filter(item => item.id !== parsedId);
-            if (mockMenuItems.length === initialLength) throw new Error('Item de Menu não encontrado.');
-            return { message: 'Item excluído' };
+    if (isNaN(parsedId)) {
+        throw new Error('ID inválido: ' + id);
+    }
+
+    if (table.toLowerCase() === 'menu_items') {
+        console.log('📋 Tentando deletar menu item ID:', parsedId);
+        
+        // Primeiro verifica se o item existe
+        const { data: existingItem, error: checkError } = await supabase
+            .from('menu_items')
+            .select('id, name')
+            .eq('id', parsedId)
+            .single();
+
+        console.log('✅ Item encontrado:', existingItem);
+        console.log('❌ Erro ao buscar:', checkError);
+
+        if (checkError || !existingItem) {
+            throw new Error('Item não encontrado no banco de dados.');
         }
-        if (table.toUpperCase() === 'PROMOTIONS') {
-            const initialLength = mockPromotions.length;
-            mockPromotions = mockPromotions.filter(item => item.id !== parsedId);
-            if (mockPromotions.length === initialLength) throw new Error('Promoção não encontrada.');
-            return { message: 'Promoção excluída' };
+
+        // Agora deleta
+        const { data, error } = await supabase
+            .from('menu_items')
+            .delete()
+            .eq('id', parsedId)
+            .select(); // Adiciona select() para retornar o item deletado
+
+        console.log('🔥 Resultado do delete:', { data, error });
+
+        if (error) {
+            console.error('❌ Erro ao deletar menu item:', error);
+            throw new Error('Erro ao deletar: ' + error.message);
         }
-        throw new Error('Tabela não suportada para exclusão.');
+
+        console.log('✅ Item deletado com sucesso:', data);
+        return { message: 'Item excluído', deleted: data };
+    }
+
+    if (table.toLowerCase() === 'promotions') {
+        console.log('🎉 Tentando deletar promoção ID:', parsedId);
+        
+        // Primeiro verifica se existe
+        const { data: existingPromo, error: checkError } = await supabase
+            .from('promotions')
+            .select('id, title')
+            .eq('id', parsedId)
+            .single();
+
+        console.log('✅ Promoção encontrada:', existingPromo);
+        console.log('❌ Erro ao buscar:', checkError);
+
+        if (checkError || !existingPromo) {
+            throw new Error('Promoção não encontrada no banco de dados.');
+        }
+
+        const { data, error } = await supabase
+            .from('promotions')
+            .delete()
+            .eq('id', parsedId)
+            .select();
+
+        console.log('🔥 Resultado do delete:', { data, error });
+
+        if (error) {
+            console.error('❌ Erro ao deletar promoção:', error);
+            throw new Error('Erro ao deletar: ' + error.message);
+        }
+
+        console.log('✅ Promoção deletada com sucesso:', data);
+        return { message: 'Promoção excluída', deleted: data };
+    }
+
+    throw new Error('Tabela não suportada para exclusão: ' + table);
+},
+
+    // ========== FUNÇÕES DE CARRINHO (CORRIGIDAS) ==========
+
+    /**
+     * Buscar carrinho do usuário (COM JOIN MANUAL)
+     */
+    getCartAsync: async (userId) => {
+        // 1. Busca itens do carrinho
+        const { data: cartItems, error: cartError } = await supabase
+            .from('cart_items')
+            .select('id, menu_item_id, quantity')
+            .eq('user_id', userId);
+
+        if (cartError) {
+            console.error('Erro ao buscar carrinho:', cartError);
+            throw cartError;
+        }
+
+        if (!cartItems || cartItems.length === 0) {
+            return [];
+        }
+
+        // 2. Busca os detalhes dos menu_items manualmente
+        const menuItemIds = cartItems.map(item => item.menu_item_id);
+        
+        const { data: menuItems, error: menuError } = await supabase
+            .from('menu_items')
+            .select('*')
+            .in('id', menuItemIds);
+
+        if (menuError) {
+            console.error('Erro ao buscar menu items:', menuError);
+            throw menuError;
+        }
+
+        // 3. Combina os dados
+        return cartItems.map(cartItem => {
+            const menuItem = menuItems.find(m => m.id === cartItem.menu_item_id);
+            return {
+                cart_id: cartItem.id,
+                id: menuItem.id,
+                name: menuItem.name,
+                description: menuItem.description,
+                price: parseFloat(menuItem.price),
+                image: menuItem.image,
+                category: menuItem.category,
+                quantity: cartItem.quantity
+            };
+        });
+    },
+
+    /**
+     * Adicionar item ao carrinho (ou atualizar quantidade se já existe)
+     */
+    addToCartAsync: async (userId, menuItemId, quantity = 1) => {
+        // Verifica se o item já existe no carrinho
+        const { data: existing, error: checkError } = await supabase
+            .from('cart_items')
+            .select('id, quantity')
+            .eq('user_id', userId)
+            .eq('menu_item_id', menuItemId)
+            .maybeSingle();
+
+        if (checkError && checkError.code !== 'PGRST116') {
+            console.error('Erro ao verificar item:', checkError);
+            throw checkError;
+        }
+
+        if (existing) {
+            // Atualiza a quantidade
+            const { data, error } = await supabase
+                .from('cart_items')
+                .update({ quantity: existing.quantity + quantity })
+                .eq('id', existing.id)
+                .select()
+                .single();
+
+            if (error) {
+                console.error('Erro ao atualizar quantidade:', error);
+                throw error;
+            }
+            return data;
+        } else {
+            // Insere novo item
+            const { data, error } = await supabase
+                .from('cart_items')
+                .insert({
+                    user_id: userId,
+                    menu_item_id: menuItemId,
+                    quantity: quantity
+                })
+                .select()
+                .single();
+
+            if (error) {
+                console.error('Erro ao inserir no carrinho:', error);
+                throw error;
+            }
+            return data;
+        }
+    },
+
+    /**
+     * Atualizar quantidade de item no carrinho
+     */
+    updateCartItemAsync: async (cartItemId, quantity) => {
+        if (quantity <= 0) {
+            // Se quantidade é 0 ou negativa, remove o item
+            return await db.removeFromCartAsync(cartItemId);
+        }
+
+        const { data, error } = await supabase
+            .from('cart_items')
+            .update({ quantity })
+            .eq('id', cartItemId)
+            .select()
+            .single();
+
+        if (error) {
+            console.error('Erro ao atualizar item do carrinho:', error);
+            throw error;
+        }
+        return data;
+    },
+
+    /**
+     * Remover item do carrinho
+     */
+    removeFromCartAsync: async (cartItemId) => {
+        const { error } = await supabase
+            .from('cart_items')
+            .delete()
+            .eq('id', cartItemId);
+
+        if (error) {
+            console.error('Erro ao remover do carrinho:', error);
+            throw error;
+        }
+        return { message: 'Item removido do carrinho' };
+    },
+
+    /**
+     * Limpar todo o carrinho do usuário
+     */
+    clearCartAsync: async (userId) => {
+        const { error } = await supabase
+            .from('cart_items')
+            .delete()
+            .eq('user_id', userId);
+
+        if (error) {
+            console.error('Erro ao limpar carrinho:', error);
+            throw error;
+        }
+        return { message: 'Carrinho limpo' };
     }
 };
 
-db.mockUsers = mockUsers;
-db.mockMenuItems = mockMenuItems;
-db.mockPromotions = mockPromotions;
-
 module.exports = db;
-// --- END OF FILE db.js ---

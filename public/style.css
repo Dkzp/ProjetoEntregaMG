@@ -434,25 +434,69 @@ header nav {
 
 /* Promoção 3 (Hot Dog) */
 .promo-3 {
-    background-color: var(--primary-color); /* Fundo Vermelho */
+    background: linear-gradient(135deg, #8B0000 0%, #B22222 100%); /* Gradiente vermelho escuro */
     color: var(--light-color);
+    box-shadow: 0 8px 25px rgba(139, 0, 0, 0.4); /* Sombra vermelha escura */
+    border: 2px solid rgba(255, 215, 0, 0.3); /* Borda sutil dourada */
 }
+
 .promo-3 h3 {
     color: var(--light-color);
     font-size: 1.8rem;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); /* Sombra no texto */
 }
+
 .promo-3 h3 span {
-    color: var(--accent-color); /* Destaque amarelo */
+    color: #FFD700; /* Dourado mais intenso */
     font-size: 2.2rem;
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.6),
+        2px 2px 8px rgba(0, 0, 0, 0.5); /* Brilho dourado */
+    font-weight: 700;
 }
+
 .promo-3 img {
     max-width: 200px;
     margin: 15px auto;
-    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+    filter: 
+        drop-shadow(0 8px 15px rgba(0, 0, 0, 0.6))
+        brightness(1.1)
+        contrast(1.15); /* Imagem mais vibrante */
 }
-.promo-3 .cta-button { margin-top: auto; /* Empurra botão para baixo */ }
 
+.promo-3 .cta-button { 
+    margin-top: auto;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); /* Botão dourado */
+    color: #2c2c2c;
+    font-weight: 700;
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    transition: all 0.3s ease;
+}
 
+.promo-3 .cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+    background: linear-gradient(135deg, #FFA500 0%, #FFD700 100%);
+}
+
+/* Adiciona um overlay sutil */
+.promo-3::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at top right, rgba(255, 215, 0, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Garante que o conteúdo fique acima do overlay */
+.promo-3 > * {
+    position: relative;
+    z-index: 2;
+}
 /* Seção Contato */
 #contato {
     padding: 60px 0;

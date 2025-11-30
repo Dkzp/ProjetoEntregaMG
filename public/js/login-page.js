@@ -31,15 +31,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(result.message || 'Ocorreu um erro ao tentar fazer login.');
             }
             
-            // --- GUARDA O TOKEN ---
-            localStorage.setItem('token', result.token); // Guarda o token no armazenamento local do navegador
+            // Guarda o token
+            localStorage.setItem('token', result.token);
 
-            showMessage('Login bem-sucedido! Redirecionando...', 'success');
+            showMessage('Login bem-sucedido!', 'success');
             
-            // Redireciona para a página principal ou para uma página de perfil
+            // Aguarda um pouco para carregar o cart.js se necessário
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Migra carrinho de sessionStorage para o banco
+            if (window.cart) {
+                await window.cart.migrateSessionToDatabase();
+            }
+            
+            // Redireciona
             setTimeout(() => {
-                window.location.href = 'index.html'; // Ou 'profile.html' se você criar uma
-            }, 1500);
+                window.location.href = 'index.html';
+            }, 1000);
 
         } catch (error) {
             showMessage(error.message);

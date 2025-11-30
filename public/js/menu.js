@@ -1,6 +1,18 @@
-// --- START OF FILE menu.js ---
+// --- menu.js - Cardápio com integração de Carrinho ---
 document.addEventListener('DOMContentLoaded', async () => {
     const menuContainer = document.getElementById('menu-all-items');
+
+    // Carrega o script do carrinho se não estiver carregado
+    if (!window.cart) {
+        const cartScript = document.createElement('script');
+        cartScript.src = 'js/cart.js';
+        document.head.appendChild(cartScript);
+        
+        // Aguarda o carrinho carregar
+        await new Promise(resolve => {
+            cartScript.onload = resolve;
+        });
+    }
 
     const fetchMenu = async () => {
         menuContainer.innerHTML = '<p style="text-align: center; font-size: 1.5rem; color: #D32F2F;">Carregando o cardápio...</p>';
@@ -18,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Agrupa os itens por categoria
             const categorizedItems = items.reduce((acc, item) => {
-                const category = item.category || 'Outros'; // Default category
+                const category = item.category || 'Outros';
                 if (!acc[category]) {
                     acc[category] = [];
                 }
@@ -26,14 +38,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return acc;
             }, {});
 
-            menuContainer.innerHTML = ''; // Limpa o carregador
+            menuContainer.innerHTML = '';
             
             for (const category in categorizedItems) {
                 const section = document.createElement('section');
                 section.id = category.toLowerCase().replace(/\s/g, '-');
                 section.className = 'menu-category';
                 
-                // Capitaliza a primeira letra da categoria para o título
                 const displayCategory = category.charAt(0).toUpperCase() + category.slice(1);
 
                 section.innerHTML = `
@@ -46,7 +57,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     <h3>${item.name}</h3>
                                     <p class="description">${item.description}</p>
                                     <p class="price">R$ ${parseFloat(item.price).toFixed(2).replace('.', ',')}</p>
-                                    <button class="add-to-cart-btn small" aria-label="Adicionar ${item.name} ao carrinho"><i class="fas fa-cart-plus"></i> Add</button>
+                                    <button class="add-to-cart-btn small" 
+                                            data-id="${item.id}"
+                                            data-name="${item.name}"
+                                            data-price="${item.price}"
+                                            data-image="${item.image}"
+                                            data-description="${item.description}"
+                                            aria-label="Adicionar ${item.name} ao carrinho">
+                                        <i class="fas fa-cart-plus"></i> Adicionar
+                                    </button>
                                 </div>
                             </div>
                         `).join('')}
@@ -55,11 +74,42 @@ document.addEventListener('DOMContentLoaded', async () => {
                 menuContainer.appendChild(section);
             }
 
+            // Adiciona event listeners aos botões de adicionar ao carrinho
+            addCartButtonListeners();
+
         } catch (error) {
             menuContainer.innerHTML = `<p style="text-align: center; font-size: 1.2rem; color: #721c24;">Erro ao buscar cardápio: ${error.message}</p>`;
         }
     };
 
+    // Adiciona funcionalidade aos botões de adicionar ao carrinho
+    function addCartButtonListeners() {
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const btn = e.currentTarget;
+                const item = {
+                    id: parseInt(btn.getAttribute('data-id')),
+                    name: btn.getAttribute('data-name'),
+                    price: parseFloat(btn.getAttribute('data-price')),
+                    image: btn.getAttribute('data-image'),
+                    description: btn.getAttribute('data-description')
+                };
+
+                // Adiciona ao carrinho
+                window.cart.addItem(item);
+
+                // Feedback visual
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
+                btn.style.backgroundColor = '#28a745';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.backgroundColor = '';
+                }, 1500);
+            });
+        });
+    }
+
     fetchMenu();
 });
-// --- END OF FILE menu.js ---
